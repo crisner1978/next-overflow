@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { Inter, Space_Grotesk as spaceGrotesk } from 'next/font/google'
 import React from 'react'
 import './globals.css'
-import Provider from './Provider'
+import { ThemeProvider } from './ThemeProvider'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const spaceG = spaceGrotesk({
@@ -21,12 +22,20 @@ type OwnProps = {
 
 export default function RootLayout({ children }: OwnProps) {
   return (
-    <Provider>
-      <html lang='en'>
-        <body className={`${inter.className} ${spaceG.variable}`}>
-          <main>{children}</main>
-        </body>
-      </html>
-    </Provider>
+    <html lang='en'>
+      <body className={`${inter.className} ${spaceG.variable}`}>
+        <ClerkProvider
+          appearance={{
+            elements: {
+              formButtonPrimary: 'primary-gradient',
+              footerActionLink: 'primary-text-gradient hover:text-primary-500',
+            },
+          }}>
+          <ThemeProvider>
+            <main>{children}</main>
+          </ThemeProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   )
 }
